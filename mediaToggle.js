@@ -35,47 +35,64 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.body.appendChild(preloadedVideo);
-
-    container.addEventListener('click', e => {
-      if (clicked) return;
-      if (!maskCtx) return;
-      if (!videoReady) {
-        console.log('Video not ready yet');
-        return;
-      }
-
-      const rect = container.getBoundingClientRect();
-      const x = Math.floor((e.clientX - rect.left)  * (maskW  / rect.width));
-      const y = Math.floor((e.clientY - rect.top)   * (maskH  / rect.height));
-
-      const p = maskCtx.getImageData(x, y, 1, 1).data;
-      const alpha = p[3];
-      if (alpha < 10) return;
-
-      clicked = true;
-      container.style.backgroundImage = 'none';
-
-      const overlay = container.querySelector('.bg-opacity-40');
-      if (overlay) overlay.style.display = 'none';
-
-      const playingText = container.querySelector('.playing-text');
-      if (playingText) playingText.remove();
-
-
-      const video = document.createElement('video');
-      video.src = videoSrc;
-      video.className = 'absolute inset-0 w-full h-full object-cover rounded-lg z-10 pointer-events-none';
-      video.autoplay = true;
-      video.muted = true;
-      video.playsInline = true;
-
-      video.onended = () => {
-        video.pause();
-        video.currentTime = video.duration;
-
-      };
-
-      container.appendChild(video);
-    });
   });
+
+  function getEventCoords(e) {
+    if (e.touches && e.touches.length > 0) {
+      return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  function handleInteraction(e) {
+    e.preventDefault();
+
+    if (clicked) return;
+    if (!maskCtx) return;
+    if (!videoReady) {
+      console.log('Video not ready yet');
+      return;
+    }
+
+    const rect = container.getBoundingClientRect();
+    const { x, y } = getEventCoords(e);
+
+    const px = Math.floor((x - rect.left) * (maskW / rect.width));
+    const py = Math.floor((y - rect.top) * (maskH / rect.height));
+
+    if (px < 0 || py < 0 || px >= maskW || py >= maskH) return;
+
+    const p = maskCtx.getImageData(px, py, 1, 1).data;
+    const alpha = p[3];
+    if (alpha < 10) return;
+
+    clicked = true;
+    container.style.backgroundImage = 'none';
+
+    const overlay = container.querySelector('.bg-opacity-40');
+    if (overlay) overlay.style.display = 'none';
+
+    const playingText = container.querySelector('.playing-text');
+    if (playingText) playingText.remove();
+
+    const video = document.createElement('video');
+    video.src = videoSrc;
+    video.className = 'absolute inset-0 w-full h-full object-cover rounded-lg z-10 pointer-events-none';
+    video.muted = true;
+    video.playsInline = true;
+
+    container.appendChild(video);
+
+    video.play().catch(err => {
+      console.log('Video playback failed:', err);
+    });
+
+    video.onended = () => {
+      video.pause();
+      video.currentTime = video.duration;
+    };
+  }
+
+  container.addEventListener('click', handleInteraction);
+  container.addEventListener('touchstart', handleInteraction, { passive: false });
 });
