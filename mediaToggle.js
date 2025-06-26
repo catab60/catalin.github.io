@@ -2,8 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('media-container');
   const maskSrc   = './head/mask.png';
   const videoSrc  = './head/hit1.webm';
-  const newImage  = './head/final.png';
-  const duration  = 900;
   let clicked     = false;
 
   const maskImg = new Image();
@@ -19,11 +17,32 @@ document.addEventListener('DOMContentLoaded', () => {
     maskCtx.drawImage(maskImg, 0, 0);
   };
 
-  // Wait for the full page (images, videos, etc.) to load
+  let preloadedVideo;
+  let videoReady = false;
+
   window.addEventListener('load', () => {
+    preloadedVideo = document.createElement('video');
+    preloadedVideo.src = videoSrc;
+    preloadedVideo.preload = 'auto';
+    preloadedVideo.muted = true;
+    preloadedVideo.playsInline = true;
+    preloadedVideo.style.display = 'none';
+    preloadedVideo.load();
+
+    preloadedVideo.addEventListener('canplaythrough', () => {
+      videoReady = true;
+      console.log('Video preloaded and ready to play');
+    });
+
+    document.body.appendChild(preloadedVideo);
+
     container.addEventListener('click', e => {
       if (clicked) return;
       if (!maskCtx) return;
+      if (!videoReady) {
+        console.log('Video not ready yet');
+        return;
+      }
 
       const rect = container.getBoundingClientRect();
       const x = Math.floor((e.clientX - rect.left)  * (maskW  / rect.width));
@@ -35,30 +54,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
       clicked = true;
       container.style.backgroundImage = 'none';
+
       const overlay = container.querySelector('.bg-opacity-40');
       if (overlay) overlay.style.display = 'none';
 
+      const playingText = container.querySelector('.playing-text');
+      if (playingText) playingText.remove();
+
+
       const video = document.createElement('video');
-      video.src       = `${videoSrc}?t=${Date.now()}`;
+      video.src = videoSrc;
       video.className = 'absolute inset-0 w-full h-full object-cover rounded-lg z-10 pointer-events-none';
-      video.autoplay  = true;
-      video.muted     = true;
+      video.autoplay = true;
+      video.muted = true;
       video.playsInline = true;
 
       video.onended = () => {
-        video.remove();
-        container.style.backgroundImage = `url('${newImage}')`;
-        if (overlay) overlay.style.display = '';
+        video.pause();
+        video.currentTime = video.duration;
+
       };
 
       container.appendChild(video);
     });
   });
-
-  // Preload the video
-  const preload = document.createElement('video');
-  preload.src = videoSrc;
-  preload.preload = 'auto';
-  preload.style.display = 'none';
-  document.body.appendChild(preload);
 });
