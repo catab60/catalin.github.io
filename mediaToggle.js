@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('media-container');
-    const maskSrc   = '/mask.png';
-    const gifSrc    = '/hit1.gif';
-    const newImage  = '/final.png';
+    const maskSrc   = './head/mask.png';
+    const gifSrc    = './head/hit1.gif';
+    const newImage  = './head/final.png';
     const duration  = 900;
     let clicked     = false;
 
