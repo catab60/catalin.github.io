@@ -429,7 +429,14 @@ document.addEventListener("DOMContentLoaded", () => {
       <ul class="flex flex-col font-medium bg-dark/90 border-t border-slate-800 rounded-lg">
         <li><a href="#home" class="block py-2 px-3 hover:text-primary transition">Home</a></li>
         <li><a href="#projects" class="block py-2 px-3 hover:text-primary transition">Projects</a></li>
-        <li><a href="#about" class="block py-2 px-3 hover:text-primary transition">About</a></li>
+        <li class="hidden md:block">
+            <a href="#about" class="block py-2 px-3 hover:text-primary transition">About</a>
+        </li>
+
+        <!-- Mobile-only About -->
+        <li class="block md:hidden">
+            <a href="#about-mobile" class="block py-2 px-3 hover:text-primary transition">About</a>
+        </li>
         <li><a href="#contact" class="block py-2 px-3 hover:text-primary transition">Contact</a></li>
       </ul>
     </div>
