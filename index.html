@@ -307,10 +307,6 @@
         }
 
 
-        .hover-image-card:hover img {
-            content: url("hobbies/watch.jpg");
-        }
-
 
     </style>
 </head>
@@ -571,7 +567,7 @@ document.addEventListener("DOMContentLoaded", () => {
       playsinline
       autoplay
       preload="metadata">
-      <source src="mobile.mp4" type="video/mp4" />
+      <source src="mobile_2.mp4" type="video/mp4" />
     </video>
   </div>
 
@@ -671,9 +667,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     </h2>
 
                     <!-- Mobile-only floating image (absolute, removed from flow) -->
-                    <img src="sc.gif"
-                    alt="Decorative"
-                    class="absolute right-[-10px] top-1/2 -translate-y-1/2 h-80 w-auto block md:hidden pointer-events-none" />
+                    <video autoplay loop muted playsinline
+                        class="absolute right-[-10px] top-1/2 -translate-y-1/2 h-80 w-auto block md:hidden pointer-events-none">
+                        <source src="sc.webm" type="video/webm">
+                    </video>
+
                 </div>
 
                 <!-- Paragraph (hidden on mobile, centered under header on desktop) -->
@@ -1045,9 +1043,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             </div>
 
-            <img src="sc.gif" 
-                alt="Decorative"
-                class="absolute bottom-0 right-[-200px] h-[700px] w-auto hidden lg:block pointer-events-none" />
+            <video autoplay loop muted playsinline
+                class="absolute bottom-0 right-[-200px] h-[700px] w-auto hidden lg:block pointer-events-none">
+                <source src="sc.webm" type="video/webm">
+            </video>
+
 
 
         
@@ -1090,8 +1090,10 @@ document.addEventListener("DOMContentLoaded", () => {
             </h2>
 
             <!-- Desktop-only floating video -->
-            <img src="mobileArt.gif"
-                class="absolute right-[10px] top-[30px] -translate-y-1/2 h-[400px] w-auto pointer-events-none block md:hidden" />
+            <video autoplay loop muted playsinline
+                class="absolute right-[10px] top-[30px] -translate-y-1/2 h-[400px] w-auto pointer-events-none block md:hidden">
+                <source src="mobileArt.webm" type="video/webm">
+            </video>
 
         </div>
 
@@ -1505,7 +1507,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="project-card glass-card p-4 rounded-xl hover:border-primary border border-slate-800 hover-image-card">
                     <div class="bg-slate-800 rounded-lg aspect-square flex items-center justify-center mb-4 overflow-hidden">
-                        <img src="hobbies/watch.gif" class="h-full w-full object-cover transition-all duration-300" />
+                        <img src="hobbies/watch.jpg" class="h-full w-full object-cover transition-all duration-300" />
                     </div>
                     <h3 class="text-lg font-semibold mb-2">Watchmaking</h3>
                     <p class="text-slate-300 text-sm mb-2">
